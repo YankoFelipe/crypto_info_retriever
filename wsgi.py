@@ -1,24 +1,18 @@
-from os import getenv
-import sched
-import time
+from application import create_app
 
-from binance.client import Client
-from average import Average
-
-client = Client(getenv("API_KEY"), getenv("SECRET_KEY"))
-s = sched.scheduler(time.time, time.sleep)
-symbol = getenv("SYMBOL")
-delay = 5  # Seconds
+app = create_app()
 
 
-def print_price(sc):
-    try:
-        print(Average.get_average_first(client, 'BTCUSDT'))
-    except:
-        print('Client error')
-    s.enter(delay, 1, print_price, ('first',))
+if __name__ == "__main__":
+    app.run(host="0.0.0.0")
 
+from application.retriever import Retriever
+from application import db
 
-s.enter(delay, 1, print_price, ('first',))
+db.create_all()
 
-s.run()
+start_id = 35000000
+end_id = 36000000
+print('Retrieving trades from ' + str(start_id) + ' to ' + str(end_id))
+Retriever.retrieve_trades(start_id, end_id)
+print('Done')
