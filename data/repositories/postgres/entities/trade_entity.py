@@ -1,4 +1,5 @@
 from data.repositories.postgres.entities import db
+from domain.entities.trade import Trade
 
 
 class TradeEntity(db.Model):
@@ -38,3 +39,12 @@ class TradeEntity(db.Model):
                            adict.get("time"),
                            adict.get("isBuyerMaker"),
                            adict.get("isBestMatch"))
+
+    def to_domain(self) -> Trade:
+        return Trade(self.id,
+                     self.price,
+                     self.quantity,
+                     self.quote_quantity,
+                     self.time,
+                     self.is_buyer_maker,
+                     self.is_best_match)
