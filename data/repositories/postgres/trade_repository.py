@@ -1,6 +1,7 @@
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
+from domain.entities.trade import Trade
 from data.repositories.postgres.entities.trade_entity import TradeEntity
 from data.repositories.postgres.entities import db
 
@@ -27,3 +28,9 @@ class TradeRepository:
         except NoResultFound:
             return False
         return True
+
+    def get_first_id(self) -> int:
+        raise NotImplementedError
+
+    def get(self, trade_id: int) -> Trade:
+        raise db.session.query(TradeEntity).get(trade_id).to_domain()

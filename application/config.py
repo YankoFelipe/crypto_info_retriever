@@ -21,7 +21,7 @@ class ProductionConfig:
 
     CACHE_TYPE = getenv("CACHE_TYPE")
     DATABASE_URI = f"postgres+psycopg2://{getenv('DB_USER')}:{getenv('DB_PASS')}@{getenv('DB_URI')}:{getenv('DB_PORT')}"
-    SQLALCHEMY_DATABASE_URI = f"{DATABASE_URI}/{getenv('DB_NAME')}"
+    SQLALCHEMY_DATABASE_URI = f"{DATABASE_URI}/binance_{getenv('SYMBOL').lower()}"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_BINDS = {}
     FLASK_DEBUG = False
