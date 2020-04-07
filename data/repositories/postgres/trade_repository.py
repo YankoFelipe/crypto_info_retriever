@@ -1,5 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.sql import func
 
 from domain.entities.trade import Trade
 from data.repositories.postgres.entities.trade_entity import TradeEntity
@@ -30,7 +31,7 @@ class TradeRepository:
         return True
 
     def get_first_id(self) -> int:
-        raise NotImplementedError
+        return db.session.query(func.min(TradeEntity.id)).one()[0]
 
     def get(self, trade_id: int) -> Trade:
-        raise db.session.query(TradeEntity).get(trade_id).to_domain()
+        return db.session.query(TradeEntity).get(trade_id).to_domain()

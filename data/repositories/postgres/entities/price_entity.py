@@ -16,6 +16,10 @@ class PriceEntity(db.Model):
         self.time = time
 
     @classmethod
+    def from_domain(cls, price: Price):
+        return PriceEntity(price.value, price.time)
+
+    @classmethod
     def from_dict(cls, adict: dict):
         return PriceEntity(adict.get("price"), adict.get("time"))
 
