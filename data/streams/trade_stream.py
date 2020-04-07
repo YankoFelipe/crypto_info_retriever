@@ -4,10 +4,11 @@ from data.repositories.postgres.trade_repository import TradeRepository
 
 class TradeStream(AbstractStream):
     _is_alive = True
+    id: int = 0
 
     def __init__(self, trades_repo: TradeRepository):
         self.trades_repo = trades_repo
-        self.id = self.trades_repo.get_first_id()
+        self.id = int(self.trades_repo.get_first_id())
 
     def next(self):
         self.id += 1

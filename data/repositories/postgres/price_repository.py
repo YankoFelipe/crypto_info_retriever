@@ -1,5 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
+from sqlalchemy.sql import func
 
 from domain.entities.price import Price
 from data.repositories.postgres.entities.price_entity import PriceEntity
@@ -30,7 +31,10 @@ class PriceRepository:
         return True
 
     def get_first_id(self) -> int:
-        raise NotImplementedError
+        return db.session.query(func.min(PriceEntity.id)).one()[0]
+
+    def get_first_time(self) -> int:
+        return db.session.query(func.min(PriceEntity.time)).one()[0]
 
     def get(self, price_id: int) -> Price:
-        raise db.session.query(PriceEntity).get(price_id).to_domain()
+        return db.session.query(PriceEntity).get(price_id).to_domain()
