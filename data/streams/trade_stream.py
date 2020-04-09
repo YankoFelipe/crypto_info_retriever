@@ -19,3 +19,6 @@ class TradeStream(AbstractStream):
 
     def is_alive(self) -> bool:
         return self._is_alive
+
+    def init_from_last_price_time(self, last_price_time: int):
+        self.id = self.trades_repo.get_id_at_time(last_price_time)

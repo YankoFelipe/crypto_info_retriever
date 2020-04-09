@@ -33,5 +33,17 @@ class TradeRepository:
     def get_first_id(self) -> int:
         return db.session.query(func.min(TradeEntity.id)).one()[0]
 
+    def get_id_at_time(self, time: int) -> int:
+        return db.session.query(TradeEntity).filter(TradeEntity.time == time).first().id
+
     def get(self, trade_id: int) -> Trade:
         return db.session.query(TradeEntity).get(trade_id).to_domain()
+
+    def get_chunk(self, from_id: int, chunk_size: int) -> dict:
+        trade_entities = db.session.query(TradeEntity)\
+            .filter(TradeEntity.id.between(from_id, from_id + chunk_size))\
+            .all()
+        trades_dict = {}
+        for trade in trade_entities:
+            trades_dict[trade.id] = trade.to_domain()
+        return trades_dict

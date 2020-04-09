@@ -13,7 +13,7 @@ from application import db
 
 db.create_all()
 print('Historical price generation begin!')
-HistoricalPriceGenerator().fill_table()
+HistoricalPriceGenerator().fill_table(is_resuming=True)
 print('Historical price generation end!')
 
 start_id = 241000000
