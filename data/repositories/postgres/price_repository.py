@@ -36,5 +36,9 @@ class PriceRepository:
     def get_first_time(self) -> int:
         return db.session.query(func.min(PriceEntity.time)).one()[0]
 
+    def get_last_time(self) -> int:
+        return db.session.query(func.max(PriceEntity.time)).one()[0]
+
     def get(self, price_id: int) -> Price:
         return db.session.query(PriceEntity).get(price_id).to_domain()
+
