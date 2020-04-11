@@ -34,7 +34,12 @@ class TradeRepository:
         return db.session.query(func.min(TradeEntity.id)).one()[0]
 
     def get_id_at_time(self, time: int) -> int:
-        return db.session.query(TradeEntity).filter(TradeEntity.time == time).first().id
+        candidate_entity = None
+        while not candidate_entity:
+            candidate_entity = db.session.query(TradeEntity).filter(TradeEntity.time == time).first()
+            if not candidate_entity:
+                time -= 5
+        return candidate_entity.id
 
     def get(self, trade_id: int) -> Trade:
         return db.session.query(TradeEntity).get(trade_id).to_domain()
@@ -47,3 +52,6 @@ class TradeRepository:
         for trade in trade_entities:
             trades_dict[trade.id] = trade.to_domain()
         return trades_dict
+
+    def has_data(self) -> bool:
+        return db.session.query(TradeEntity).first() is not None

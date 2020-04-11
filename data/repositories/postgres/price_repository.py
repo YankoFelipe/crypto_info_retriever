@@ -42,3 +42,5 @@ class PriceRepository:
     def get(self, price_id: int) -> Price:
         return db.session.query(PriceEntity).get(price_id).to_domain()
 
+    def has_data(self) -> bool:
+        return db.session.query(PriceEntity).first() is not None

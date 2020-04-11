@@ -44,7 +44,14 @@ FLASK_RUN_PORT = 5500
 ```
 
 ### Run
-
+To get trades use:
 ```bash
-pipenv run flask run
+pipenv run flask trades --begin <INT> --end <INT>
 ```
+Both parameters must be multiply of 1000. It is recommended tu use 35000000 as the begin ID considering that it maps to 2018.04.12 (the time t_0 of this project).
+
+To generate prices from your trades use:
+```bash
+pipenv run flask prices
+```
+If you already have prices it will continue from where it was left.
