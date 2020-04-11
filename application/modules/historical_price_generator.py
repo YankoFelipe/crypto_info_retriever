@@ -17,12 +17,13 @@ class HistoricalPriceGenerator:
 
     def fill_table(self, is_resuming: bool = False):
         if is_resuming:
-            last_time = self.prices_repo.get_last_time()
+            last_time = self.prices_repo.get_last_time() or 0
             self.trade_stream.init_from_last_price_time(last_time - self.time_step_size)
             print('Last price time found')
         self.next()
-        self.init_time(self.current_trade.time)
-        self.new_price(self.current_trade.price)
+        if self.current_trade is not None:
+            self.init_time(self.current_trade.time)
+            self.new_price(self.current_trade.price)
 
         while self.trade_stream.is_alive():
             if self.current_trade.time == self.time() + self.time_step_size:

@@ -1,6 +1,10 @@
 from data.streams.abstract_stream import AbstractStream
 from data.repositories.postgres.trade_repository import TradeRepository
 
+def optional_map(optional_arg, f):
+    if optional_arg is None:
+        return None
+    return f(optional_arg)
 
 class TradeStream(AbstractStream):
     _is_alive = True
@@ -8,7 +12,7 @@ class TradeStream(AbstractStream):
 
     def __init__(self, trades_repo: TradeRepository):
         self.trades_repo = trades_repo
-        self.id = int(self.trades_repo.get_first_id())
+        self.id = optional_map(self.trades_repo.get_first_id(), int) or 0
 
     def next(self):
         self.id += 1
