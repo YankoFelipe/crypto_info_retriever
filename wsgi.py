@@ -24,3 +24,9 @@ def trades(begin, end):
 def prices():
     from application.commands.prices import PricesCommand
     return PricesCommand().do()
+
+
+@app.cli.command('check_prices_table')
+def check_price_table():
+    from application.commands.check_prices_table import CheckPricesTableCommand
+    return CheckPricesTableCommand().do()

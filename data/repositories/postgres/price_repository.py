@@ -20,6 +20,22 @@ class PriceRepository:
             raise Exception("Problem saving price")
         return True
 
+    def save_prices(self, prices: [Price]) -> bool:
+        is_valid_chunk = False
+        try:
+            for price in prices:
+                if not is_valid_chunk and self.is_already_saved(price.time):
+                    continue
+                else:
+                    is_valid_chunk = True
+                price_entity = PriceEntity.from_domain(price)
+                db.session.add(price_entity)
+            db.session.commit()
+        except SQLAlchemyError:
+            db.session.rollback()
+            raise Exception("Problem saving price")
+        return True
+
     @classmethod
     def is_already_saved(cls, time: int):
         try:
@@ -41,6 +57,19 @@ class PriceRepository:
 
     def get(self, price_id: int) -> Price:
         return db.session.query(PriceEntity).get(price_id).to_domain()
+
+    def get_chunk(self, from_id: int, chunk_size: int, as_dict: bool = False) -> [Price]:
+        entities = db.session.query(PriceEntity)\
+            .filter(PriceEntity.id.between(from_id, from_id+chunk_size))\
+            .limit(chunk_size)\
+            .all()
+        ret = {}
+        if as_dict:
+            for item in entities:
+                ret[item.id] = item.to_domain()
+        else:
+            ret = [item.to_domain() for item in entities]
+        return ret
 
     def has_data(self) -> bool:
         return db.session.query(PriceEntity).first() is not None

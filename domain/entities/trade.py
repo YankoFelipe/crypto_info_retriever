@@ -14,3 +14,13 @@ class Trade:
         self.time = time
         self.is_buyer_maker = is_buyer_maker
         self.is_best_match = is_best_match
+
+    @classmethod
+    def from_dict(cls, adict: dict):
+        return Trade(adict.get("id"),
+                     adict.get("price"),
+                     adict.get("qty"),
+                     adict.get("quoteQty"),
+                     int(adict.get("time")/1000),
+                     adict.get("isBuyerMaker"),
+                     adict.get("isBestMatch"))

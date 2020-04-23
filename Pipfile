@@ -13,6 +13,7 @@ psycopg2 = "*"
 python-dotenv = "*"
 python-binance = "*"
 pandas = "*"
+tabulate = "*"
 
 [requires]
 python_version = "3.7"

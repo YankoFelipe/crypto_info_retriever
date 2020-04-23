@@ -1,5 +1,7 @@
-from data.streams.trade_stream import TradeStream
-from data.repositories.postgres.trade_repository import TradeRepository
+from application.repositories import binance_repo, trades_repo
+from data.streams.binance_trade_stream import BinanceTradeStream
+# from data.streams.trade_stream import TradeStream
+# from data.repositories.postgres.trade_repository import TradeRepository
 from data.repositories.postgres.price_repository import PriceRepository
 from domain.entities.price import Price
 
@@ -10,27 +12,33 @@ class HistoricalPriceGenerator:
     current_price: Price
     current_trade = None
     previous_trade = None
+    prices_to_save = []
 
     def __init__(self):
-        self.trade_stream = TradeStream(TradeRepository())
+        self.trade_stream = BinanceTradeStream(binance_repo, use_domain_trades=False)  # TradeStream(TradeRepository())
         self.prices_repo = PriceRepository()
 
     def fill_table(self, is_resuming: bool = False):
         if is_resuming:
+            print('Preparing to resume')
             last_time = self.prices_repo.get_last_time()
-            self.trade_stream.init_from_last_price_time(last_time - self.time_step_size)
-            print('Last price time found')
+            print('Last time found')
+            last_id = trades_repo.get_id_at_time(last_time)
+            print('Last id found')
+            self.trade_stream.set_id(last_id - last_id % 1000)
+            # self.trade_stream.init_from_last_price_time(last_time - self.time_step_size)
+            print('Ready to fill!')
         self.next()
-        self.init_time(self.current_trade.time)
-        self.new_price(self.current_trade.price)
+        self.init_time(self.trade_stream.time())
+        self.new_price(self.trade_stream.price())
 
         while self.trade_stream.is_alive():
-            if self.current_trade.time == self.time() + self.time_step_size:
-                self.new_price(self.current_trade.price)
+            if self.trade_stream.time() == self.time() + self.time_step_size:
+                self.new_price(self.trade_stream.price())
                 self.update_time()
 
-            while self.current_trade.time > self.time() + self.time_step_size:
-                self.new_price(self.previous_trade.price)
+            while self.trade_stream.time() > self.time() + self.time_step_size:
+                self.new_price(self.trade_stream.previous_price())
                 self.update_time()
             self.next()
 
@@ -49,4 +57,7 @@ class HistoricalPriceGenerator:
 
     def new_price(self, new_price_value: float):
         self.current_price = Price(new_price_value, self.time())
-        self.prices_repo.save(self.current_price)
+        self.prices_to_save.append(self.current_price)
+        if len(self.prices_to_save) == 100:
+            self.prices_repo.save_prices(self.prices_to_save)
+            self.prices_to_save.clear()

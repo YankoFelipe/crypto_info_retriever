@@ -1,6 +1,7 @@
 from data.repositories.postgres.entities import db
 from domain.entities.price import Price
 
+
 class PriceEntity(db.Model):
     time_step_size = 5
     __tablename__ = "prices"
