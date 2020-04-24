@@ -21,9 +21,10 @@ def trades(begin, end):
 
 
 @app.cli.command('prices')
-def prices():
+@click.option('--source')
+def prices(source):
     from application.commands.prices import PricesCommand
-    return PricesCommand().do()
+    return PricesCommand(source).do()
 
 
 @app.cli.command('check_prices_table')

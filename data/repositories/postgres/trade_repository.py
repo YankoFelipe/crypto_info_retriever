@@ -3,6 +3,7 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.sql import func
 
 from domain.entities.trade import Trade
+from domain.constants.dt import dt
 from data.repositories.postgres.entities.trade_entity import TradeEntity
 from data.repositories.postgres.entities import db
 
@@ -35,10 +36,13 @@ class TradeRepository:
 
     def get_id_at_time(self, time: int) -> int:
         candidate_entity = None
+        last_trade_in_table = db.session.query(TradeEntity).order_by(TradeEntity.id.desc()).first()
+        if time > last_trade_in_table.time:
+            return last_trade_in_table.id - last_trade_in_table.id % 1000
         while not candidate_entity:
             candidate_entity = db.session.query(TradeEntity).filter(TradeEntity.time == time).first()
             if not candidate_entity:
-                time -= 5
+                time -= dt
         return candidate_entity.id
 
     def get(self, trade_id: int) -> Trade:

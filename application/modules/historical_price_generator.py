@@ -1,21 +1,26 @@
 from application.repositories import binance_repo, trades_repo
 from data.streams.binance_trade_stream import BinanceTradeStream
-# from data.streams.trade_stream import TradeStream
-# from data.repositories.postgres.trade_repository import TradeRepository
+from data.streams.trade_stream import TradeStream
+from data.repositories.postgres.trade_repository import TradeRepository
 from data.repositories.postgres.price_repository import PriceRepository
 from domain.entities.price import Price
+from domain.entities.data_source import DataSource
+from domain.constants.dt import dt
 
 
 class HistoricalPriceGenerator:
-    time_step_size = 5  # Seconds
+    time_step_size = dt
     current_time: int
     current_price: Price
     current_trade = None
     previous_trade = None
     prices_to_save = []
 
-    def __init__(self):
-        self.trade_stream = BinanceTradeStream(binance_repo, use_domain_trades=False)  # TradeStream(TradeRepository())
+    def __init__(self, source: DataSource):
+        if source is DataSource.remote:
+            self.trade_stream = BinanceTradeStream(binance_repo, use_domain_trades=False)
+        else:
+            self.trade_stream = TradeStream(TradeRepository())
         self.prices_repo = PriceRepository()
 
     def fill_table(self, is_resuming: bool = False):
@@ -23,11 +28,10 @@ class HistoricalPriceGenerator:
             print('Preparing to resume')
             last_time = self.prices_repo.get_last_time()
             print('Last time found')
-            last_id = trades_repo.get_id_at_time(last_time)
+            last_id = trades_repo.get_id_at_time(last_time)  # TODO: Implement a better search using the binance_repo
             print('Last id found')
             self.trade_stream.set_id(last_id - last_id % 1000)
-            # self.trade_stream.init_from_last_price_time(last_time - self.time_step_size)
-            print('Ready to fill!')
+        print('Ready to fill!')
         self.next()
         self.init_time(self.trade_stream.time())
         self.new_price(self.trade_stream.price())

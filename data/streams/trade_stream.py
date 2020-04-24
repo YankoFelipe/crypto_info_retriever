@@ -5,6 +5,7 @@ from data.repositories.postgres.trade_repository import TradeRepository
 class TradeStream(AbstractStream):
     _is_alive = True
     id: int = 0
+    current_trade = None
 
     def __init__(self, trades_repo: TradeRepository):
         self.trades_repo = trades_repo
@@ -12,13 +13,25 @@ class TradeStream(AbstractStream):
 
     def next(self):
         self.id += 1
-        new_trade = self.trades_repo.get(self.id)
-        if not bool(new_trade):
+        self.current_trade = self.trades_repo.get(self.id)
+        if not bool(self.current_trade):
             self._is_alive = False
-        return new_trade
+        return self.current_trade
 
     def is_alive(self) -> bool:
         return self._is_alive
 
     def init_from_last_price_time(self, last_price_time: int):
         self.id = self.trades_repo.get_id_at_time(last_price_time)
+
+    def time(self):
+        return self.current_trade.time
+
+    def price(self):
+        return self.current_trade.price
+
+    def previous_price(self):
+        return self.trades_repo.get(self.id-1).price
+
+    def set_id(self, _id: int):
+        self.id = _id

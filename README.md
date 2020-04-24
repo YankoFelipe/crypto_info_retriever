@@ -44,14 +44,23 @@ FLASK_RUN_PORT = 5500
 ```
 
 ### Run
+
+#### Trades
 To get trades use:
 ```bash
 pipenv run flask trades --begin <INT> --end <INT>
 ```
-Both parameters must be multiply of 1000. It is recommended tu use 35000000 as the begin ID considering that it maps to 2018.04.12 (the time t_0 of this project).
+Both parameters must be multiples of 1000. It is recommended to use 35000000 as the begin ID considering that it maps to 2018.04.12 (the time t_0 of this project).
 
-To generate prices from your trades use:
+#### Prices
+To get prices use:
 ```bash
-pipenv run flask prices
+pipenv run flask prices --source <STRING>
 ```
+where the source can be `local` or `remote`. The `local` option requires to have trades in the corresponding table.
 If you already have prices it will continue from where it was left.
+
+To check the prices table and get some metrics about it, use:
+```bash
+pipenv run flask check_prices_table
+```

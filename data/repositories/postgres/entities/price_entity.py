@@ -1,9 +1,9 @@
 from data.repositories.postgres.entities import db
 from domain.entities.price import Price
+from domain.constants.dt import dt
 
 
 class PriceEntity(db.Model):
-    time_step_size = 5
     __tablename__ = "prices"
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -12,7 +12,7 @@ class PriceEntity(db.Model):
 
     def __init__(self, value: float, time: int):
         self.value = value
-        if time % self.time_step_size > 0:
+        if time % dt > 0:
             raise Exception('Invalid time!')
         self.time = time
 

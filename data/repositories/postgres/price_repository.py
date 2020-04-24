@@ -21,6 +21,8 @@ class PriceRepository:
         return True
 
     def save_prices(self, prices: [Price]) -> bool:
+        if self.is_already_saved(prices[-1].time):
+            return True  # skip this chunk
         is_valid_chunk = False
         try:
             for price in prices:
