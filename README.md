@@ -1,4 +1,21 @@
-# 🥑 Binance Client 🥑
+# 🥑 Binance Client - Crypto info retriever 🥑
+
+## Introduction
+
+The present repository is the first of a 3 part project to create a crypto-currency trader bot.
+This first part consist on gathering all the data needed to train the bot into stock trading.
+
+## Accomplished tasks
+- [x] Print anything periodically.
+- [x] Connect to binance through the python-binance package.
+- [x] Get the trade price instantaneously.
+- [x] Get historical trades (ca. 20GB or 200M trades from Apr. 2018 to Apr. 2020).
+- [x] Get historical prices with a `dt` of 5 seconds.
+- [x] Validate local table of historical prices.
+- [x] Get maximum rise and fall for several sliding windows within the historical data.
+- [ ] Define new statistics for the price table.
+- [ ] (Ongoing) Get historical Moving averages for any order and period.
+- [ ] Define new market indicators to get.
 
 ## How to install
 
