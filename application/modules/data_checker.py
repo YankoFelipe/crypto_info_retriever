@@ -1,4 +1,4 @@
-from application.repositories import trades_repo, prices_repo
+from application.repositories import trades_repo, prices_repo, moving_averages_repo
 
 
 class DataChecker:
@@ -13,3 +13,7 @@ class DataChecker:
     @staticmethod
     def has_prices() -> bool:
         return prices_repo.has_data()
+
+    @staticmethod
+    def has_moving_averages(candle_duration: int, order: int) -> bool:
+        return moving_averages_repo.has_data(candle_duration, order)

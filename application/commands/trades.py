@@ -1,5 +1,5 @@
 from application.modules.data_checker import DataChecker
-from application.modules.retriever import Retriever
+from application.modules.trades_retriever import Retriever
 
 
 class TradesCommand:

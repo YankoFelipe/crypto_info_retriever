@@ -35,6 +35,6 @@ class MovingAverageCommand:
         if has_moving_averages:
             print('Resuming from where it was left')
         MovingAverageGenerator(prices_repo, moving_averages_repo, self.candle_duration, self.order)\
-            .fill_table(is_resuming=has_prices)
+            .fill_table(is_resuming=has_moving_averages)
         print('Done')
         print('If you want more data to test get more prices. Otherwise prepare the training camp.')

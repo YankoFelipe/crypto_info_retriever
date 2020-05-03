@@ -31,3 +31,11 @@ def prices(source):
 def check_price_table():
     from application.commands.check_prices_table import CheckPricesTableCommand
     return CheckPricesTableCommand().do()
+
+
+@app.cli.command('moving_average')
+@click.option('--order')
+@click.option('--candle_duration')
+def check_price_table(order, candle_duration):
+    from application.commands.moving_average import MovingAverageCommand
+    return MovingAverageCommand(order, candle_duration).do()
