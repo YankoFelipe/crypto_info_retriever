@@ -13,8 +13,9 @@ This first part consist on gathering all the data needed to train the bot into s
 - [x] Get historical prices with a `dt` of 5 seconds.
 - [x] Validate local table of historical prices.
 - [x] Get maximum rise and fall for several sliding windows within the historical data.
+- [ ] Get histograms for range [3, 3.1, 3.2, ..., 10] of rise and falls of price compare with moving average (30m, 25).
 - [ ] Define new statistics for the price table.
-- [ ] (Ongoing) Get historical Moving averages for any order and period.
+- [x] Get historical Moving averages for any order and period.
 - [ ] Define new market indicators to get.
 
 ## How to install
