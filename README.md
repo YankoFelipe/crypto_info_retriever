@@ -1,4 +1,5 @@
 # 🥑 Binance Client - Crypto info retriever 🥑
+codename: `Skyward`
 
 ## Introduction
 
@@ -10,9 +11,11 @@ This first part consist on gathering all the data needed to train the bot into s
 - [x] Connect to binance through the python-binance package.
 - [x] Get the trade price instantaneously.
 - [x] Get historical trades (ca. 20GB or 200M trades from Apr. 2018 to Apr. 2020).
+- [ ] Close sprint at UNIX(1587771210)
 - [x] Get historical prices with a `dt` of 5 seconds.
 - [x] Validate local table of historical prices.
 - [x] Get maximum rise and fall for several sliding windows within the historical data.
+- [x] Get instants when the price run over a several percentage compared with any moving average.
 - [ ] Get histograms for range [3, 3.1, 3.2, ..., 10] of rise and falls of price compare with moving average (30m, 25).
 - [ ] Define new statistics for the price table.
 - [x] Get historical Moving averages for any order and period.

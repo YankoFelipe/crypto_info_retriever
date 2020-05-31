@@ -1,10 +1,11 @@
-from data.streams.abstract_stream import AbstractStream
-from data.repositories.postgres.price_repository import PriceRepository
+from domain.streams.price_stream import PriceStream as IPriceStream
+from domain.repositories.price_repository import PriceRepository
 from domain.entities.price import Price
 from domain.constants.dt import dt
 
 
-class PriceStream(AbstractStream):
+class PriceStream(IPriceStream):
+
     _is_alive = True
     id = 1
     chunk_size = 250000
@@ -16,16 +17,18 @@ class PriceStream(AbstractStream):
     current_price = None
     previous_price = None
 
-    def __init__(self, prices_repo: PriceRepository):
+    def __init__(self, prices_repo: PriceRepository, verbose: bool = False):
         self.prices_repo = prices_repo
         self.update_dict()
+        self.verbose = verbose
 
     def next(self) -> Price:
         self.id += 1
         self.previous_price = self.current_price
         self.current_price = self.current_prices.get(self.id)
         if not self.current_price:
-            print('Getting ' + str(self.chunk_size) + ' more trades from ' + str(self.id))
+            if self.verbose:
+                print('Getting ' + str(self.chunk_size) + ' more trades from ' + str(self.id))
             self.update_dict()
             self.current_price = self.current_prices.get(self.id)
             if not self.current_price:
@@ -61,3 +64,10 @@ class PriceStream(AbstractStream):
 
     def current_id(self):
         return self.id
+
+    def new_price(self) -> Price:
+        return self.next()
+
+    def set_time(self, time: int):
+        self.id = self.prices_repo.get_id_at(time)
+        self.update_dict()

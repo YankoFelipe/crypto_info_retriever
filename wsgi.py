@@ -36,6 +36,17 @@ def check_price_table():
 @app.cli.command('moving_average')
 @click.option('--order')
 @click.option('--candle_duration')
-def check_price_table(order, candle_duration):
+def moving_average(order, candle_duration):
     from application.commands.moving_average import MovingAverageCommand
     return MovingAverageCommand(order, candle_duration).do()
+
+
+@app.cli.command('deviations')
+@click.option('--order')
+@click.option('--candle')
+@click.option('--start')
+@click.option('--finish')
+@click.option('--step')
+def deviations(order, candle, start, finish, step):
+    from application.commands.deviations import DeviationsCommand
+    return DeviationsCommand(order, candle, start, finish, step).do()

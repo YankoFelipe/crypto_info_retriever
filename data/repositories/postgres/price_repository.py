@@ -75,3 +75,6 @@ class PriceRepository:
 
     def has_data(self) -> bool:
         return db.session.query(PriceEntity).first() is not None
+
+    def get_id_at(self, time: int) -> int:
+        return db.session.query(PriceEntity).filter_by(time=time).first().id

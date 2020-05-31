@@ -12,28 +12,28 @@ class MovingAverageEntity(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
     value = db.Column(db.Float, nullable=False)
-    spec_id = db.Column(db.Integer, db.ForeignKey("moving_average_specs.id"), nullable=False)
+    ma_spec_id = db.Column(db.Integer, db.ForeignKey("moving_average_specs.id"), nullable=False)
     time_range = db.Column(IntRangeType, nullable=False)  # Closed left, open right
     first_close_time = db.Column(db.Integer, nullable=False)
 
-    spec = relationship("MovingAverageSpecEntity")
+    ma_spec = relationship("MovingAverageSpecEntity")
 
     def __init__(self,
                  value: float,
-                 spec: MovingAverageSpec,
+                 ma_spec: MovingAverageSpec,
                  time_range: IntInterval):
         self.value = value
-        if not spec.id:
+        if not ma_spec.id:
             raise Exception('MA entity constructor without spec ID')
-        self.spec_id = spec.id
+        self.spec_id = ma_spec.id
         self.time_range = time_range
-        self.first_close_time = time_range.upper - spec.candle_in_seconds() * spec.order
+        self.first_close_time = time_range.upper - ma_spec.candle_in_seconds() * ma_spec.order
 
     def to_domain(self) -> MovingAverage:
         return MovingAverage(self.value,
-                             self.spec.to_domain(),
+                             self.ma_spec.to_domain(),
                              self.time_range.lower,
-                             self.time_range.upper,
+                             self.time_range.upper + 1,
                              self.id)
 
     @classmethod

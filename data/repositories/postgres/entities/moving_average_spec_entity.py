@@ -13,7 +13,8 @@ class MovingAverageSpecEntity(db.Model):
     candle_in_seconds = db.Column(db.Integer, nullable=False)
     order = db.Column(db.Integer, nullable=False)
 
-    moving_averages = relationship("MovingAverageEntity", back_populates='spec', cascade="delete")
+    moving_averages = relationship("MovingAverageEntity", back_populates='ma_spec', cascade="delete")
+    deviation_specs_using = relationship("DeviationSpecEntity", back_populates='ma_spec', cascade="delete")
 
     def __init__(self,
                  candle_in_human_readable: str,
