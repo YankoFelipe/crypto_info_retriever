@@ -15,8 +15,6 @@ is_positive = lambda x: x >= 0
 
 
 class DeviationGenerator:
-    forward_time = 300  # 5 minutes
-
     def __init__(self,
                  moving_averages_repo: MovingAverageRepository,
                  deviations_repo: DeviationRepository,
@@ -25,6 +23,7 @@ class DeviationGenerator:
         self.moving_averages_repo = moving_averages_repo
         self.deviations_repo = deviations_repo
         self.deviation_spec = deviation_spec
+        self.forward_time = deviation_spec.ma_spec.candle_duration.in_seconds()  # Not sure if this is the best number
         self.is_positive_deviation = is_positive(self.deviation_spec.percentage)
         price_stream = PriceStream(prices_repo)
         ma_manager = MovingAverageManager([deviation_spec.ma_spec], moving_averages_repo)
