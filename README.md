@@ -66,22 +66,38 @@ FLASK_RUN_PORT = 5500
 
 ### Run
 
-#### Trades
-To get trades use:
-```bash
-pipenv run flask trades --begin <INT> --end <INT>
-```
-Both parameters must be multiples of 1000. It is recommended to use 35000000 as the begin ID considering that it maps to 2018.04.12 (the time t_0 of this project).
-
 #### Prices
 To get prices use:
 ```bash
-pipenv run flask prices --source <STRING>
+pipenv run flask prices --source remote
 ```
-where the source can be `local` or `remote`. The `local` option requires to have trades in the corresponding table.
+the value of `--source` can be `local` or `remote`. The `local` option requires to have trades in the corresponding table and it may behave slower than the remote option.
 If you already have prices it will continue from where it was left.
 
 To check the prices table and get some metrics about it, use:
 ```bash
 pipenv run flask check_prices_table
 ```
+
+#### Moving averages
+To generate a moving average use:
+```bash
+pipenv run flask moving_average --order <INT> --candle_duration <STR>
+```
+where order is the number of candle closes are being considered and candle duration can be one of the following
+`['1m', '3m', '5m', '15m', '30m', '1h', '2h', '6h', '12h' '1d', '1w', '4w']`. Prices table with values is a prerequisite.
+
+#### Deviations
+To generate a deviations use:
+```bash
+pipenv run flask deviations --order <INT> --candle <STR> --start <FLOAT> --finish <FLOAT> --step <FLOAT>
+```
+where order and candle behave the same as the Moving average command, the percentages to use are `[start, start+step, ..., finish]`
+Prices table and moving averages table are a prerequisite.
+
+#### Trades (not in use)
+To get trades use:
+```bash
+pipenv run flask trades --begin <INT> --end <INT>
+```
+Both parameters must be multiples of 1000. It is recommended to use 35000000 as the begin ID considering that it maps to 2018.04.12 (the time t_0 of this project).
