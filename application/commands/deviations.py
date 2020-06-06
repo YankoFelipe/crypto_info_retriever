@@ -15,7 +15,9 @@ class DeviationsCommand:
             start_float = float(start)
             finish_float = float(finish)
             step_float = float(step)
-            for percentage in numpy.arange(start_float, finish_float, step_float):
+            arr = compose_array(start_float, finish_float, step_float)
+            print("Percentages to use " + str(arr))
+            for percentage in arr:
                 spec = DeviationSpec.from_labels(order, candle_duration, percentage)
                 self.deviation_specs.append(spec)
         except:
@@ -60,3 +62,12 @@ class DeviationsCommand:
         print(f'Generating deviations of {percentage}% compared to the moving average {candle} of order {order}')
         if has_deviations:
             print('Resuming from where it was left')
+
+
+def compose_array(start, finish, step):
+    arr = []
+    current = start
+    while current < finish:
+        arr.append(float(format(current, '.1f')))
+        current += step
+    return arr
