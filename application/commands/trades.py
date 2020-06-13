@@ -1,9 +1,9 @@
 from application.modules.data_checker import DataChecker
 from application.modules.trades_retriever import Retriever
+from domain.constants.epoch_id import epoch_id
 
 
 class TradesCommand:
-    epoch_id = 35000000
 
     def __init__(self, begin: str, end: str):
         self.check_inputs(begin, end)
@@ -15,14 +15,14 @@ class TradesCommand:
     def do(self):
         if not DataChecker.has_trades():
             print("It looks like it's your first time running this command.")
-            print("It is recommended to use 'begin = " + str(self.epoch_id) + "'.")
+            print("It is recommended to use 'begin = " + str(epoch_id) + "'.")
             print("Which maps to 2018.04.12, the time 0 for the interest of this project")
-            print("And 'end = " + str(self.epoch_id + 1000000) + "', to get a significant amount of data.")
+            print("And 'end = " + str(epoch_id + 1000000) + "', to get a significant amount of data.")
             input("If you are sure of your begin/end values. Then press Enter to continue...")
         print("Retrieving trades from ID " + self.begin + " to " + self.end)
         Retriever.retrieve_trades(self.begin_id, self.end_id)
         print("Done")
-        print("Expected size = " + str(self.end_id - self.epoch_id))
+        print("Expected size = " + str(self.end_id - epoch_id))
         print("'If you want to get more trades, repeat the command using 'begin = " + self.end + "' ")
 
     @classmethod

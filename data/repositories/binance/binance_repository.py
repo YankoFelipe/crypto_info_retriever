@@ -35,3 +35,7 @@ class BinanceRepository:
             return (first_bid + first_ask)/2
         except:
             print('get_average_first: Client error')
+
+    def get_id_at_time(self, time: int):
+        # TODO: Implement this!
+        NotImplementedError("You'll have to implement this to continue. Whoopsies!")

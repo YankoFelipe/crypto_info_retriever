@@ -1,5 +1,6 @@
 from data.streams.abstract_stream import AbstractStream
 from data.repositories.binance.binance_repository import BinanceRepository
+from domain.constants.epoch_id import epoch_id
 
 
 class BinanceTradeStream(AbstractStream):
@@ -12,7 +13,7 @@ class BinanceTradeStream(AbstractStream):
     def __init__(self, binance_repo: BinanceRepository, use_domain_trades: bool = True):
         self.binance_repo = binance_repo
         self.use_domain_trades = use_domain_trades
-        self.id = 35000000
+        self.id = epoch_id
         self.update_dict()
 
     def next(self):

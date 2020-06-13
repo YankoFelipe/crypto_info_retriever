@@ -1,4 +1,4 @@
-from application.repositories import binance_repo, trades_repo
+from application.repositories import binance_repo
 from data.streams.binance_trade_stream import BinanceTradeStream
 from data.streams.trade_stream import TradeStream
 from data.repositories.postgres.trade_repository import TradeRepository
@@ -28,13 +28,12 @@ class HistoricalPriceGenerator:
             print('Preparing to resume')
             last_time = self.prices_repo.get_last_time()
             print('Last time found')
-            last_id = trades_repo.get_id_at_time(last_time)  # TODO: Implement a better search using the binance_repo
+            last_id = binance_repo.get_id_at_time(last_time)
             print('Last id found')
             self.trade_stream.set_id(last_id - last_id % 1000)
         print('Ready to fill!')
         self.next()
         self.init_time(self.trade_stream.time())
-        self.new_price(self.trade_stream.price())
 
         while self.trade_stream.is_alive():
             if self.trade_stream.time() == self.time() + self.time_step_size:

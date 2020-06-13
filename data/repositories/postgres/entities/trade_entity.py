@@ -3,7 +3,6 @@ from domain.entities.trade import Trade
 
 
 class TradeEntity(db.Model):
-    first_id = 35000000
     __tablename__ = "trades"
 
     id = db.Column(db.Integer, primary_key=True, nullable=False)
