@@ -9,7 +9,7 @@ from domain.managers.moving_average_manager import MovingAverageManager
 from domain.entities.market import Market
 from domain.entities.deviation_spec import DeviationSpec
 from domain.entities.deviation import Deviation
-
+from domain.constants.forward_time_factor import forward_time_factor
 
 is_positive = lambda x: x >= 0
 
@@ -23,8 +23,7 @@ class DeviationGenerator:
         self.moving_averages_repo = moving_averages_repo
         self.deviations_repo = deviations_repo
         self.deviation_spec = deviation_spec
-        # Not sure if this is the best forward time ¯\_(ツ)_/¯
-        self.forward_time = 1.5 * deviation_spec.ma_spec.candle_duration.in_seconds()
+        self.forward_time = forward_time_factor * deviation_spec.ma_spec.candle_duration.in_seconds()
         self.is_positive_deviation = is_positive(self.deviation_spec.percentage)
         price_stream = PriceStream(prices_repo)
         ma_manager = MovingAverageManager([deviation_spec.ma_spec], moving_averages_repo)

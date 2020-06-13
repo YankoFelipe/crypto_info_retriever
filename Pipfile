@@ -18,6 +18,7 @@ pandas = "*"
 tabulate = "*"
 intervals = "*"
 sqlalchemy-utils = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.7"

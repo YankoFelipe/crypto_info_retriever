@@ -16,3 +16,9 @@ class Deviation:
 
     def set_time_from_stamp(self, time: int):
         self.time = datetime.fromtimestamp(time, timezone.utc)
+
+    def date(self):
+        return self.time.date()
+
+    def time_of_the_day(self):
+        return self.time.time()

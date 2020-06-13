@@ -25,3 +25,11 @@ class DeviationRepository(AbstractRepository):
     @abstractmethod
     def has_data(self, spec_id: int) -> bool:
         pass
+
+    @abstractmethod
+    def get_by_spec(self, spec: DeviationSpec) -> [Deviation]:
+        pass
+
+    @abstractmethod
+    def get_all(self) -> [DeviationSpec]:
+        pass

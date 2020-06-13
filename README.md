@@ -95,6 +95,17 @@ pipenv run flask deviations --order <INT> --candle <STR> --start <FLOAT> --finis
 where order and candle behave the same as the Moving average command, the percentages to use are `[start, start+step, ..., finish]`
 Prices table and moving averages table are a prerequisite.
 
+To analyse a single deviation type use:
+```bash
+pipenv run flask analyse_deviations --order <INT> --candle <STR> --percentage <FLOAT>
+```
+This will save a histogram in `png` format with some statistics of interest in the directory `<CURRENT_DIR>/<candle><order>` and the name `<HISTOGRAM_TYPE>_<percentage>.png`. Where the histogram type can will be monthly and weekly.
+
+To get the histograms for all the saved deviations use:
+```bash
+pipenv run flask analyse_all_deviations
+```
+
 #### Trades (not in use)
 To get trades use:
 ```bash

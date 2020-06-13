@@ -50,3 +50,18 @@ def moving_average(order, candle_duration):
 def deviations(order, candle, start, finish, step):
     from application.commands.deviations import DeviationsCommand
     return DeviationsCommand(order, candle, start, finish, step).do()
+
+
+@app.cli.command('analyse_deviations')
+@click.option('--order')
+@click.option('--candle')
+@click.option('--percentage')
+def deviations(order, candle, percentage):
+    from application.commands.analyse_deviations import AnalyseDeviationsCommand
+    return AnalyseDeviationsCommand(order, candle, percentage).do()
+
+
+@app.cli.command('analyse_all_deviations')
+def deviations():
+    from application.commands.analyse_all_deviations import AnalyseAllDeviationsCommand
+    return AnalyseAllDeviationsCommand().do()
