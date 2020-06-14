@@ -42,6 +42,9 @@ class BinanceTradeStream(AbstractStream):
     def time(self):
         return self.current_trade.time if self.use_domain_trades else int(self.current_trade['time']/1000)
 
+    def previous_time(self):
+        return self.previous_trade.time if self.use_domain_trades else int(self.previous_trade['time']/1000)
+
     def price(self):
         return self.current_trade.price if self.use_domain_trades else self.current_trade['price']
 

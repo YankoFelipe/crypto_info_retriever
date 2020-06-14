@@ -39,10 +39,11 @@ class HistoricalPriceGenerator:
             if self.trade_stream.time() == self.time() + self.time_step_size:
                 self.new_price(self.trade_stream.price())
                 self.update_time()
+            elif self.trade_stream.time() > self.time() + self.time_step_size:
+                while self.time() < self.trade_stream.time():
+                    self.new_price(self.trade_stream.previous_price())
+                    self.update_time()
 
-            while self.trade_stream.time() > self.time() + self.time_step_size:
-                self.new_price(self.trade_stream.previous_price())
-                self.update_time()
             self.next()
 
     def next(self):

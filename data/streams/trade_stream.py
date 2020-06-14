@@ -27,6 +27,9 @@ class TradeStream(AbstractStream):
     def time(self):
         return self.current_trade.time
 
+    def previous_time(self):
+        return self.trades_repo.get(self.id-1).time
+
     def price(self):
         return self.current_trade.price
 
