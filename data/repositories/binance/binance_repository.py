@@ -1,4 +1,5 @@
 from datetime import datetime
+from intervals import IntInterval
 
 from domain.entities.trade import Trade
 
@@ -37,5 +38,21 @@ class BinanceRepository:
             print('get_average_first: Client error')
 
     def get_id_at_time(self, time: int):
-        # TODO: Implement this!
-        NotImplementedError("You'll have to implement this to continue. Whoopsies!")
+        # TODO: Improve this with a better search
+        if datetime.fromtimestamp(time) > datetime.now():
+            raise Exception("Must be a time in the past")
+        candidate_id = 0
+        current_trades = self.thousand_trades_from_id(candidate_id)
+        if time < current_trades[0].time:
+            raise Exception("Must be a time after the beginning of the exchange")
+        time_covered = self.time_covered_by_trades(current_trades)
+        while time not in time_covered:
+            candidate_id += 1000
+            current_trades = self.thousand_trades_from_id(candidate_id)
+            time_covered = self.time_covered_by_trades(current_trades)
+        return
+
+    @staticmethod
+    def time_covered_by_trades(trades: [Trade]) -> IntInterval:
+        ids = list(trades.keys())
+        return IntInterval.closed(trades[ids[0]].time, trades[ids[-1]].time)

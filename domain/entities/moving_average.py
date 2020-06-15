@@ -14,11 +14,11 @@ class MovingAverage:
         self.value = value
         self.spec = spec
         if time_lower % spec.candle_in_seconds() > 0:
-            raise Exception("Invalid lower interval")
+            raise Exception(f"Invalid lower interval {time_lower}")
         if time_upper % spec.candle_in_seconds() > 0:
-            raise Exception("Invalid upper interval")
+            raise Exception(f"Invalid upper interval {time_upper}")
         if time_upper - time_lower != spec.candle_in_seconds():
-            raise Exception("Invalid covers more than one period")
+            raise Exception(f"Invalid, {time_lower} and {time_upper} cover more than one period")
         self.time_range = IntInterval.closed_open(time_lower, time_upper)
 
     def __str__(self):
