@@ -25,7 +25,7 @@ class MovingAverageEntity(db.Model):
         self.value = value
         if not ma_spec.id:
             raise Exception('MA entity constructor without spec ID')
-        self.spec_id = ma_spec.id
+        self.ma_spec_id = ma_spec.id
         self.time_range = time_range
         self.first_close_time = time_range.upper - ma_spec.candle_in_seconds() * ma_spec.order
 

@@ -35,7 +35,7 @@ class MovingAverageRepository(IMovingAverageRepository):
 
     def is_already_saved(self, ma_entity: MovingAverageEntity) -> bool:
         saved_ma = db.session.query(MovingAverageEntity)\
-            .filter_by(ma_spec_id=ma_entity.spec_id,
+            .filter_by(ma_spec_id=ma_entity.ma_spec_id,
                        time_range=ma_entity.time_range)\
             .first()
         return saved_ma is not None
