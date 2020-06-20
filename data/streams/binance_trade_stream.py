@@ -50,3 +50,6 @@ class BinanceTradeStream(AbstractStream):
 
     def previous_price(self):
         return self.previous_trade.price if self.use_domain_trades else self.previous_trade['price']
+
+    def kill(self):
+        self._is_alive = False

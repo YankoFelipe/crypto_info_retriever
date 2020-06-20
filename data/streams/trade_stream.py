@@ -38,3 +38,6 @@ class TradeStream(AbstractStream):
 
     def set_id(self, _id: int):
         self.id = _id
+
+    def kill(self):
+        self._is_alive = False

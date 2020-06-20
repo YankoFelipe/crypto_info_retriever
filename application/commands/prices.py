@@ -17,4 +17,3 @@ class PricesCommand:
             print('Resuming from where it was left')
         HistoricalPriceGenerator(self.source).fill_table(is_resuming=has_prices)
         print('Done')
-        print('If you want more data to test get more trades. Otherwise prepare the training camp')

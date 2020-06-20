@@ -15,6 +15,8 @@ class HistoricalPriceGenerator:
     current_trade = None
     previous_trade = None
     prices_to_save = []
+    sprint_end = 1590969600  # 2020.06.01 00:00:00 UTC
+    is_sooner_than_sprint_end = lambda x: x.time <= HistoricalPriceGenerator.sprint_end
 
     def __init__(self, source: DataSource):
         if source is DataSource.remote:
@@ -63,5 +65,9 @@ class HistoricalPriceGenerator:
         self.current_price = Price(new_price_value, self.time())
         self.prices_to_save.append(self.current_price)
         if len(self.prices_to_save) == 100:
+            if self.prices_to_save[-1].time >= self.sprint_end:
+                prices = self.prices_to_save
+                self.prices_to_save = list(filter(HistoricalPriceGenerator.is_sooner_than_sprint_end, prices))
+                self.trade_stream.kill()
             self.prices_repo.save_prices(self.prices_to_save)
             self.prices_to_save.clear()
